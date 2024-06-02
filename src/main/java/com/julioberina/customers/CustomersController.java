@@ -25,8 +25,14 @@ public class CustomersController {
     private Integer customerCount = 0;
 
     @GetMapping()
-    public List<Customer> getCustomers() {
-        return customers;
+    public ResponseEntity<ApiResponse<List<Customer>>> getCustomers() {
+        ApiResponse<List<Customer>> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                "Customers obtained successfully!",
+                customers
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("{id}")
@@ -75,7 +81,7 @@ public class CustomersController {
                 true
         );
 
-        return new ResponseEntity<ApiResponse<Boolean>>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -90,6 +96,6 @@ public class CustomersController {
                 true
         );
 
-        return new ResponseEntity<ApiResponse<Boolean>>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
