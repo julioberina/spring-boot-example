@@ -37,8 +37,8 @@ public class CustomerController {
     }
 
     @PostMapping()
-    public ResponseEntity<ApiResponse<Boolean>> createCustomer(@RequestBody Customer customer) {
-        ApiResponse<Boolean> response = new ApiResponse<>(
+    public ResponseEntity<ApiResponse<Customer>> createCustomer(@RequestBody Customer customer) {
+        ApiResponse<Customer> response = new ApiResponse<>(
                 HttpStatus.CREATED.value(),
                 customerService.createCustomer(customer)
         );
@@ -47,8 +47,8 @@ public class CustomerController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ApiResponse<Boolean>> updateCustomer(@PathVariable int id, @RequestBody Customer customer) {
-        ApiResponse<Boolean> response = new ApiResponse<>(
+    public ResponseEntity<ApiResponse<Customer>> updateCustomer(@PathVariable int id, @RequestBody Customer customer) {
+        ApiResponse<Customer> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 customerService.updateCustomer(id, customer)
         );
@@ -57,8 +57,8 @@ public class CustomerController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<ApiResponse<Boolean>> deleteCustomer(@PathVariable int id) {
-        ApiResponse<Boolean> response = new ApiResponse<>(
+    public ResponseEntity<ApiResponse<Customer>> deleteCustomer(@PathVariable int id) {
+        ApiResponse<Customer> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 customerService.deleteCustomer(id)
         );

@@ -20,30 +20,30 @@ public class CustomerDaoImpl implements CustomerDao {
         return findCustomerById(id);
     }
 
-    public Boolean createCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         customer.setId(++customerCount);
         customers.add(customer);
-        return true;
+        return customer;
     }
 
-    public Boolean updateCustomer(Integer id, Customer customer) {
+    public Customer updateCustomer(Integer id, Customer customer) {
         Customer updateCustomer = findCustomerById(id);
 
         updateCustomer.setName(Optional.ofNullable(customer.getName()).orElse(updateCustomer.getName()));
         updateCustomer.setAge(Optional.ofNullable(customer.getAge()).orElse(updateCustomer.getAge()));
         updateCustomer.setEmail(Optional.ofNullable(customer.getEmail()).orElse(updateCustomer.getEmail()));
 
-        return true;
+        return updateCustomer;
     }
 
-    public Boolean deleteCustomer(Integer id) {
+    public Customer deleteCustomer(Integer id) {
         Customer deleteCustomer = findCustomerById(id);
 
         customers = customers.stream()
                 .filter(customer -> !customer.getId().equals(deleteCustomer.getId()))
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        return true;
+        return deleteCustomer;
     }
 
     private Customer findCustomerById(Integer id) {

@@ -20,15 +20,15 @@ public class CustomerService {
         return customerDao.getCustomer(id);
     }
 
-    public Boolean createCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         return customerDao.createCustomer(customer);
     }
 
-    public Boolean updateCustomer(Integer id, Customer customer) {
+    public Customer updateCustomer(Integer id, Customer customer) {
         return customerDao.updateCustomer(id, customer);
     }
 
-    public Boolean deleteCustomer(Integer id) {
+    public Customer deleteCustomer(Integer id) {
         return customerDao.deleteCustomer(id);
     }
 }

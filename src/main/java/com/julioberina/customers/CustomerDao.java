@@ -5,7 +5,7 @@ import java.util.List;
 public interface CustomerDao {
     public List<Customer> getCustomers();
     public Customer getCustomer(Integer id);
-    public Boolean createCustomer(Customer customer);
-    public Boolean updateCustomer(Integer id, Customer customer);
-    public Boolean deleteCustomer(Integer id);
+    public Customer createCustomer(Customer customer);
+    public Customer updateCustomer(Integer id, Customer customer);
+    public Customer deleteCustomer(Integer id);
 }
