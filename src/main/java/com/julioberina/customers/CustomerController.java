@@ -5,31 +5,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "customers", produces = "application/json")
-public class CustomersController {
+public class CustomerController {
+    private final CustomerService customerService;
 
-    public static class Customer {
-        public Integer id;
-        public String name;
-        public Integer age;
-        public String email;
-    };
-
-    private List<Customer> customers = new ArrayList<>();
-    private Integer customerCount = 0;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @GetMapping()
     public ResponseEntity<ApiResponse<List<Customer>>> getCustomers() {
         ApiResponse<List<Customer>> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
-                "Customers obtained successfully!",
-                customers
+                customerService.getCustomers()
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -37,14 +28,9 @@ public class CustomersController {
 
     @GetMapping("{id}")
     public ResponseEntity<ApiResponse<Customer>> getCustomer(@PathVariable int id) {
-        Optional<Customer> customer = customers.stream()
-                .filter(c -> c.id == id)
-                .findFirst();
-
         ApiResponse<Customer> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
-                "Customer " + (customer.isPresent() ? "found!" : "not found!"),
-                customer.orElse(null)
+                customerService.getCustomer(id)
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -52,33 +38,19 @@ public class CustomersController {
 
     @PostMapping()
     public ResponseEntity<ApiResponse<Boolean>> createCustomer(@RequestBody Customer customer) {
-        customer.id = ++customerCount;
-        customers.add(customer);
-
         ApiResponse<Boolean> response = new ApiResponse<>(
                 HttpStatus.CREATED.value(),
-                "Customer created successfully!",
-                true
+                customerService.createCustomer(customer)
         );
 
-        return new ResponseEntity<ApiResponse<Boolean>>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<ApiResponse<Boolean>> updateCustomer(@PathVariable int id, @RequestBody Customer customer) {
-        Customer updateCustomer = customers.stream()
-                .filter(c -> c.id == id)
-                .findFirst()
-                .orElseThrow();
-
-        updateCustomer.name = Optional.ofNullable(customer.name).orElse(updateCustomer.name);
-        updateCustomer.age = Optional.ofNullable(customer.age).orElse(updateCustomer.age);
-        updateCustomer.email = Optional.ofNullable(customer.email).orElse(updateCustomer.email);
-
         ApiResponse<Boolean> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
-                "Customer updated successfully!",
-                true
+                customerService.updateCustomer(id, customer)
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -86,14 +58,9 @@ public class CustomersController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<ApiResponse<Boolean>> deleteCustomer(@PathVariable int id) {
-        customers = customers.stream()
-                .filter(customer -> customer.id != id)
-                .collect(Collectors.toCollection(ArrayList::new));
-
         ApiResponse<Boolean> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
-                "Customer deleted successfully!",
-                true
+                customerService.deleteCustomer(id)
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
