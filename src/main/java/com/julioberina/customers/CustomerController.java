@@ -1,5 +1,6 @@
 package com.julioberina.customers;
 
+import com.julioberina.Main;
 import com.julioberina.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,12 @@ import java.util.List;
 @RequestMapping(value = "customers", produces = "application/json")
 public class CustomerController {
     private final CustomerService customerService;
+    private final Main.Foo foo;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService,
+                              Main.Foo foo) {
         this.customerService = customerService;
+        this.foo = foo;
     }
 
     @GetMapping()
@@ -61,6 +65,16 @@ public class CustomerController {
         ApiResponse<Customer> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
                 customerService.deleteCustomer(id)
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("foo")
+    public ResponseEntity<ApiResponse<String>> getCustomerFoo() {
+        ApiResponse<String> response = new ApiResponse<>(
+                HttpStatus.OK.value(),
+                foo.getFoo()
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);
